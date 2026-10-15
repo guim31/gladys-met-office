@@ -16,8 +16,8 @@ its only runtime dependency. It started from the official JavaScript template.
 ```bash
 npm install
 npm test                                  # node --test, the built-in runner
-node --test test/devices.test.js          # one file
-node --test --test-name-pattern "plug"    # tests whose name matches
+node --test test/app.test.js              # one file
+node --test --test-name-pattern "quota"   # tests whose name matches
 npm run lint                              # ESLint
 npm run format:check                      # Prettier, as the CI runs it
 npm run format                            # Prettier, fix in place
@@ -31,16 +31,26 @@ pushing.
 ## Architecture
 
 ```
-index.js                          SDK wiring only: handlers registered before connect()
-src/devices/index.js              registry of the device blueprints + dispatch helpers
-src/devices/<type>.js             one device type per file (buildDevice, onPoll, onSetValue...)
-src/scenes.js                     scene action handlers (manifest `scene_actions`)
-src/widgets.js                    dashboard widget handlers (manifest `widgets`)
-src/config.js                     DEFAULT_CONFIG (mirrors the manifest defaults) + normalization
-src/weather.js                    example driver (Open-Meteo)
-gladys-assistant-integration.json manifest: name, config_schema, actions, image...
-docs/en.md, docs/fr.md            user documentation, re-hosted by Gladys (mandatory)
-test/                             node --test, against the SDK's fake Gladys (integration-sdk/testing)
+index.js                          SDK wiring only: registerHandlers(gladys), shutdown, connect()
+src/app.js                        every SDK handler (connected, scan, poll, devices, config, action,
+                                  scene action, widget); reads the houses of Gladys (getHouses)
+src/hub.js                        ForecastHub: cache of forecasts per place, API reads and back-off,
+                                  states, staleness, transport badges, status, "Test" report
+src/poller.js                     the container's own refresh timer (Gladys#3198), core onPoll as fallback
+src/location.js                   the place device: frozen feature keys, bounds, states
+src/metoffice/client.js           DataHub Site-specific client (hourly, daily), error kinds
+src/metoffice/forecast.js         raw GeoJSON -> normalized steps and days, "now", dates, compass
+src/widgets.js                    the "forecast" dashboard widget (pure content builder, 2 views)
+src/scenes.js                     the "get_forecast" scene action (daily forecast from the cache)
+src/i18n.js                       every text in en/fr/de/es (feature names, weather codes, statuses,
+                                  report, widget)
+src/config.js                     DEFAULT_CONFIG (mirrors the manifest defaults), places, quota pace
+src/issues.js                     repeated failures logged once (warn, then info on recovery)
+scripts/probe.mjs                 read-only probe of the real API (fake key, then METOFFICE_API_KEY)
+gladys-assistant-integration.json manifest: name, config_schema, actions, scene_actions, widgets...
+docs/{en,fr,de,es}.md             user documentation, re-hosted by Gladys, same sections
+test/                             node --test, against the SDK's fake Gladys and a fake DataHub
+test/fixtures/metoffice/          real API answers, from Home Assistant's tests (Apache-2.0)
 .github/scripts/release.mjs       release helpers (manifest bump, changelog), tested in test/
 ```
 
@@ -70,8 +80,10 @@ test/                             node --test, against the SDK's fake Gladys (in
   `type: "provider"`: 5.1.0). `test/manifest.test.js` ties the manifest to the
   code (defaults, action, scene and widget handlers): change both sides
   together.
-- **User-facing text** is bilingual (English and French): action messages,
-  manifest texts, and `docs/en.md` / `docs/fr.md`, kept in sync.
+- **User-facing text** exists in four languages (English, French, German with
+  "du", Spanish with "usted"): action messages, statuses, widget texts, feature
+  names, weather conditions, manifest texts, and `docs/{en,fr,de,es}.md` with
+  the same sections. `test/i18n.test.js` enforces it.
 - **Style.** Prettier formats, ESLint catches mistakes. Comments explain why,
   in English. Tests never touch the network.
 
@@ -233,3 +245,59 @@ long, et sur un « Sie »/« Ihr… » de politesse en allemand. Le store exige 
 - Docs `en`, `fr`, `de`, `es` avec les mêmes sections.
 - Chauffe, ouverture, sécurité : ne rien rendre pilotable « comme un thermostat » ou par un assistant
   vocal quand une erreur serait dangereuse (leçon d'OctoPrint).
+
+## Met Office (propre à cette intégration)
+
+**API.** Met Office Weather DataHub, produit « Site Specific » (Global Spot) :
+`GET https://data.hub.api.metoffice.gov.uk/sitespecific/v0/point/{hourly|three-hourly|daily}?latitude=…&longitude=…&includeLocationName=true`,
+clé dans l'en-tête `apikey` (jamais dans l'URL). C'est l'API de l'intégration Home Assistant
+`metoffice` depuis la fermeture de DataPoint (bibliothèque `datapoint` 0.12, GPL-3.0 : lue, rien recopié).
+
+- `200` : GeoJSON, `features[0]` = point du modèle le plus proche : `geometry.coordinates`
+  `[lon, lat, altitude]`, `properties.location.name`, `requestPointDistance` (m), `modelRunDate`
+  (`2024-11-23T12:00Z`), `timeSeries`. Horaire : 49 pas (`screenTemperature`, `feelsLikeTemperature`,
+  `screenRelativeHumidity`, `mslp` **en Pa**, `windSpeed10m`/`windGustSpeed10m` **en m/s**,
+  `windDirectionFrom10m`, `visibility` **en m**, `uvIndex`, `significantWeatherCode`,
+  `precipitationRate` mm/h, `probOfPrecipitation` %). Quotidien : 8 dates à `T00:00Z`, champs `day…`,
+  `night…`, `midday…`, `midnight…` ; la **première date est la veille, avec sa nuit seulement**.
+- **Nuit d'une date = la nuit qui la suit** (convention « today / tonight » du Met Office, hypothèse
+  de `datapoint`) : minimale du jour = `nightMinScreenTemperature` de la même entrée. Non vérifié sur
+  une vraie clé.
+- `401` (ou `403`) clé refusée, `429` quota du jour épuisé (FAQ DataHub). Le corps du 401 de la
+  fixture n'est **pas une capture** : seul le code est lu.
+- **Quota gratuit : 360 appels par jour par abonnement, sans report** (page tarifs du DataHub, doc HA :
+  « le plan gratuit suffit pour un lieu »). Budget de 324 (`DAILY_CALL_BUDGET`) : horaire toutes les
+  15/30/60 min + quotidien toutes les 3 h ; 3 lieux au plus (3 × (96 + 8) = 312). Seul le minuteur
+  (plus le bouton de test et la découverte) appelle l'API ; widget, action de scène, `onDeviceCreated`,
+  `onPoll` dans la période et reconnexion sont servis par le cache. 429 → pause d'une heure.
+- **Codes de temps** : -1 (traces de pluie) à 30, paires jour/nuit (2/3, 9/10, 13/14…), 4 « non
+  utilisé ». Traduits dans `src/i18n.js` ; le -1 vient de la doc DataHub, absent des fixtures.
+- **Non vérifié en réel** : la session n'atteint ni l'API ni `datahub.metoffice.gov.uk` (proxy).
+  Fixtures = vraies réponses des tests de Home Assistant (Apache-2.0) ; `scripts/probe.mjs` est à
+  lancer depuis une machine qui a le réseau.
+
+**Choix et pièges.**
+
+- **Ce sont des prévisions, pas des mesures** : « maintenant » = pas horaire le plus proche de
+  l'horloge (règle de HA), qui avance seul entre deux lectures ; le minuteur publie toutes les 5 min
+  au plus sans appeler l'API. Au-delà de **6 h sans lecture réussie**, plus rien n'est publié (le
+  heartbeat daterait un vieux calcul comme actuel), pastille `degraded` puis `unreachable`.
+- **Lieux** : maisons de Gladys par `getHouses()` (manifeste `location: true`, présent dès la 5.0 :
+  `gladys_version` 5.1.0 suffit) ; `platformId` = `house-<selector>`, l'appareil survit au
+  déplacement de l'épingle. Coordonnées saisies : `platformId` = position arrondie à 3 décimales
+  (~100 m). Pas de champ `source: "houses"` (5.2.0) : inutile puisque toutes les maisons sont lues.
+  Pas d'événement de mise à jour des maisons : relues au démarrage, à la reconnexion, au scan, au test.
+- **Pas de mph dans Gladys** pour `speed-sensor` (m/s et km/h seulement) : vent en km/h ; le widget
+  convertit en mph pour `units: 'us'`.
+- **Pas de catégorie « probabilité »** : `precipitation-sensor/decimal` en `percent` (icône parapluie,
+  historique) ; le nom de la fonctionnalité dit ce que c'est.
+- Visibilité : `distance-sensor/decimal` en km. Temps de l'heure : `text/text` (min/max 0/0,
+  `keep_history: false`), texte dans la langue de la config, jamais vide (code inconnu → pas d'état).
+- Action de scène `get_forecast` plutôt qu'un déclencheur : les jours à venir n'existent pas comme
+  états ; un déclencheur « il pleut » doublonnerait la probabilité/l'intensité. Champs non requis
+  (défaut `tomorrow`), sorties scalaires, une valeur inconnue est omise (pas `null`).
+- Le minuteur `AbortSignal.timeout` ne retient pas la boucle d'événements : un test qui l'attend doit
+  garder un minuteur actif. Le heartbeat du SDK date avec `Date.now()` : le simuler avec
+  `t.mock.timers.enable({ apis: ['Date'] })`.
+- `test/i18n.test.js` rejette « Sie » en début de phrase même quand il désigne l'intégration
+  (« Sie wurde… ») : tourner la phrase autrement.

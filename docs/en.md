@@ -1,61 +1,161 @@
-# Demo Devices Template
+# Met Office
 
-This is the user documentation of the integration. Gladys re-hosts this file
-and shows a permanent **Documentation** link to it in the Configuration screen
-(in the user's language, with English as the fallback) — it is when
-configuring that the user needs it most. Keep the short onboarding hints in
-the `section` blocks of the manifest `config_schema`; put the long
-step-by-step (screenshots, troubleshooting…) here.
+The forecasts of the **Met Office**, the UK's national weather service, in Gladys: temperature, feels
+like, humidity, pressure, wind, chance and rate of precipitation, visibility, UV index and the weather
+of the hour, for your home or any place, plus the next 7 days on the dashboard. The data comes from the
+free plan of the **Met Office Weather DataHub** (the "Site-specific" forecast, the one Home Assistant
+uses since the old DataPoint service closed).
 
-## What you get
+This integration is not affiliated with the Met Office, nor endorsed by it. It was developed without the
+hardware and without a DataHub account (only the API key is needed, no device): the answers of the API
+come from its documentation and from the tests of Home Assistant. Feedback welcome.
 
-Six demo devices show up after installation: a weather station (real data
-from Open-Meteo), a switch, a dimmable light, a smart plug with power
-metering, a motion sensor and a camera.
+## Overview
+
+- **One device per place**: the houses of Gladys (their location in the settings), or up to 3 places
+  typed as coordinates.
+- Each device carries the forecast **of the current hour**: temperature, feels-like temperature,
+  humidity, pressure, wind speed, gusts and direction, chance of precipitation, precipitation rate,
+  visibility, UV index and the weather conditions as a text ("Light rain", "Sunny"…).
+- **A dashboard widget**: now, then the next 7 days (tap a day for the details) or the next 24 hours
+  (the temperature curve and the coming hours).
+- **A scene action**: the forecast of today, tomorrow or the day after (maximum, minimum, chance of
+  rain, gusts, UV, weather) for the next steps of a scene.
+- Read-only: nothing is controlled, nothing is sent to the Met Office but the position of the places.
+
+The Met Office model covers the whole world ("Global Spot"), and is best over the United Kingdom.
+
+## Requirements
+
+- Gladys 5.1 or later.
+- A free **Met Office Weather DataHub** account and API key: sign up on
+  [datahub.metoffice.gov.uk](https://datahub.metoffice.gov.uk/), open the **Site Specific** product,
+  subscribe to its **free plan** (Global Spot), then copy the **API key** of the subscription. It is
+  shown only once: if lost, reset it under **My subscriptions**.
+- A place: a house of Gladys located in **Settings → Houses**, or coordinates.
+- Gladys must reach the Internet (`data.hub.api.metoffice.gov.uk`).
 
 ## Configuration
 
-1. Open the **Configuration** tab of the integration.
-2. Set the **latitude** and **longitude** the demo weather station should
-   observe (they default to Paris), and pick your temperature unit.
-   The **refresh interval** sets how often the weather station and the
-   plug's power are read: every 5 minutes by default, every minute at most.
-3. Save: the devices appear in the **Discovery** tab, ready to be added.
+1. In **Integrations**, install Met Office. The install screen says it reads the location of your
+   houses: this is how it forecasts for them without asking for coordinates again.
+2. Open the **Configuration** tab and paste the **API key**.
+3. **Places to forecast**: _The houses of Gladys_ (default) takes every located house, 3 at most; a
+   house without a location is skipped. _Coordinates_ uses the **Coordinates** field: latitude and
+   longitude in decimal degrees, an optional name before a colon, places separated by semicolons, for
+   example `Exeter: 50.7184, -3.5339; Leeds: 53.7997, -1.5492`.
+4. Pick the **refresh interval** (30 minutes by default) and the **language of the texts**.
+5. Save, then click **Test the connection**: each place answers with its temperature, its weather and
+   the distance to the model point, and the report says how many API calls a day the settings use.
+6. Open the **Discovery** tab and add the places.
 
-The **Prefer the local connection** toggle drives the demo plug: it reports
-the channel it actually uses as a badge (local or cloud), with an orange dot
-when it runs degraded (local refused, cloud fallback).
+The feature names are chosen when a place is added: change the language before adding it. A house
+keeps its device when its location is moved; typed coordinates changed by more than about 100 m make a
+new device.
 
-## Actions
+## The place devices
 
-- **Test the weather provider** — performs a live request to Open-Meteo and
-  shows the current temperature and humidity under the button.
-- **Identify a device** — pick one of your devices in the list and it will
-  signal itself (the demo light "blinks" in the logs).
+Each place is a device named "Met Office" and the name of the house, the name typed, or else the name
+the Met Office gives to its model point ("Met Office Wavertree"). Its features, in metric units:
 
-## Scenes
+| Feature                 | Unit | Note                                                      |
+| ----------------------- | ---- | --------------------------------------------------------- |
+| Temperature             | °C   | at 1.5 m                                                  |
+| Feels like              | °C   | with the wind and the humidity                            |
+| Humidity                | %    | relative humidity                                         |
+| Pressure                | hPa  | sea-level pressure                                        |
+| Wind speed, wind gusts  | km/h | at 10 m                                                   |
+| Wind direction          | °    | where the wind comes from: 0 = north, 90 = east           |
+| Chance of precipitation | %    | of the hour                                               |
+| Precipitation rate      | mm/h |                                                           |
+| Visibility              | km   |                                                           |
+| UV index                |      |                                                           |
+| Weather conditions      | text | "Light rain", "Partly cloudy"… in the configured language |
 
-The integration adds its own cards to the scene editor (Gladys 5.1 or
-later), under the **Integrations** category:
+These are **forecasts for the current hour**, not measurements: the Met Office model gives a value for
+every hour, and the device follows the hour nearest to the clock. Only the values that change are sent
+to Gladys, and every value is sent again at least every 6 hours so it never looks outdated.
 
-- **Motion detected** (trigger) — starts the scene when a demo motion sensor
-  sees something move. Optionally pick the sensor and what moved (person,
-  animal); left empty, any detection matches. The following actions can
-  read what moved with `{{triggerEvent.data.target}}`.
-- **Identify a device** (action) — makes the chosen device signal itself.
-  It returns whether the device could signal itself, so the following
-  actions can depend on it.
+If the Met Office cannot be read for **6 hours**, the device stops being updated (an old forecast would
+look current) and its badge in the device list turns orange, or red while the service does not answer.
+Everything is back at the next successful read.
 
-## Dashboard
+## Dashboard widget
 
-Add the **Demo status** widget to a dashboard: it shows the live
-temperature of the weather station and the power of the office plug, the
-connection the plug currently uses (orange when degraded) and the observed
-location. Its **Identify the light** button makes the demo light signal
-itself.
+Add the **Met Office forecast** widget to a dashboard, pick a place (empty: the first one) and a view:
+
+- **Next 7 days** (default): the temperature, chance of rain and wind of now, then one line per day
+  with its weather, its maximum and the minimum of the following night, and its chance of rain. Tap a
+  day: weather of the day and of the night, wind, gusts, UV index.
+- **Next 24 hours**: the temperature curve with its maximum and minimum, then the next 6 hours.
+
+The time of the model run is shown under the name. The widget follows the units of your Gladys profile
+(°F and mph in imperial units) and never calls the API: it shows the last forecasts read.
+
+## Scene triggers and actions
+
+**Met Office: forecast of a day** (scene action) — pick a place (empty: the first one) and a day
+(today, tomorrow by default, the day after tomorrow). The next steps of the scene can use: the place,
+the date, the weather of the day (text) and its Met Office code, the maximum temperature, the minimum of
+the following night, the chance of rain of the day and of the night (%), the midday gusts (km/h) and the
+maximum UV index. The texts are in the language of the configuration. The action reads the forecast
+already fetched (refreshed every 3 hours) and costs no API call.
+
+There is no scene trigger: the weather of now is a feature of the place device, which the standard
+**A device state changes** card already handles (for example "chance of precipitation above 80").
+
+## Scene examples
+
+- **Garden watering**: every evening at 8 pm, run _Met Office: forecast of a day_ for tomorrow, then
+  water only if the chance of rain of the day is below 40 %.
+- **Frost warning**: every evening, get tomorrow's forecast and send "Frost tonight, cover the plants"
+  when the minimum temperature is below 1 °C.
+- **Awning**: when the _Wind gusts_ of the place go above 40 km/h, retract the awning.
+- **Washing line**: every morning, send "Good day to hang the washing out" when today's chance of rain
+  is below 20 %.
+- **Morning briefing**: at 7 am, send "Today: {weather}, {max} °C, {rain} % chance of rain" with the
+  outputs of the action.
+
+## API quota and refresh
+
+The free plan of the Site-specific forecast allows **360 API calls a day**, for every tool using the
+key (an unused call is not carried over to the next day). Each place costs one call per refresh of the
+hourly forecast and one call every 3 hours for the 7-day forecast: **56 calls a day** for one place at
+30 minutes, 104 at 15 minutes. 3 places at most fit in the quota at any interval; the integration keeps
+about 10 % of it for restarts and tests, and slows down by itself when needed. Only the places added to
+Gladys are refreshed. If the key is used elsewhere (another home automation system, a script), pick a
+slower interval.
+
+When the quota is spent anyway (HTTP 429), the reads pause for one hour. A refused key is tried again
+every hour, or as soon as the configuration is saved. The Met Office model runs every hour: refreshing
+faster than 15 minutes would bring nothing new.
 
 ## Troubleshooting
 
-The integration logs everything it does: check the integration logs from the
-Gladys UI (or `docker logs` on the host) with `LOG_LEVEL=debug` for the full
-detail.
+- **"The Met Office refuses the API key"**: copy the key again from the DataHub, **My subscriptions**
+  (reset it if it was lost), and check that the subscription is the **Site Specific** one.
+- **"No place to forecast"**: locate a house in **Settings → Houses** of Gladys, or choose
+  _Coordinates_ and fill the field.
+- **"Ignored, not coordinates"** in the test report: an entry of the field could not be read; write
+  `latitude, longitude` in decimal degrees (`51.5072, -0.1276`).
+- **"Daily API quota spent"**: see "API quota and refresh"; the reads resume after an hour.
+- **"The Met Office Weather DataHub does not answer"**: Gladys cannot reach
+  `data.hub.api.metoffice.gov.uk`: check its Internet connection and DNS.
+- **The model point is far away** (test report): the forecast is for the nearest point of the Met
+  Office grid, usually within a few kilometres.
+- Details: set `LOG_LEVEL=debug` on the container to see each read in the integration logs. The API
+  key is never written in them.
+
+## Limits
+
+- Forecasts, not observations: the values of "now" are the model's forecast for the current hour.
+- Wind in km/h on the devices (Gladys speed sensors know km/h and m/s, not mph); the widget shows mph
+  to the users with imperial units.
+- 3 places at most, the limit of the free quota. A paid plan is not taken into account.
+- The weather conditions text is written in the language of the configuration, not of each user.
+- The day of a daily forecast is the date of the Met Office (UK time): for a place far from the UK, the
+  "today" of the widget may start a few hours early or late.
+- No weather warnings: the Met Office warnings are not part of this API.
+- The data and its availability depend on the Met Office, which may change its plans at any time.
+- Developed without the hardware or an account: the answers come from the API documentation and from
+  the tests of Home Assistant, not from a real key yet. Feedback is welcome on the GitHub repository.

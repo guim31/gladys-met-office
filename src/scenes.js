@@ -1,41 +1,70 @@
 // -----------------------------------------------------------------------------
-// Scene actions (SDK v0.14+, Gladys 5.1+).
+// The scene action "get_forecast": the daily forecast of today, tomorrow or
+// the day after, as outputs the next steps of a scene can test or quote
+// ("tomorrow's chance of rain above 70 %: notify, fold the awning").
 //
-// A scene action is an OPERATION a scene author places in a scene, with
-// parameters and a result: "identify this device", "take a snapshot", "clean
-// these rooms". Each one is declared in the manifest `scene_actions` field
-// (key, label, `fields` in the config_schema grammar, scalar `outputs`) and
-// handled here, keyed by that same `key`; index.js registers every entry with
-// `gladys.onSceneAction(key, ...)`.
+// What the device features cannot give: they carry the hour of now, the
+// days ahead live only here and in the widget. No scene trigger on purpose:
+// "it rains now" is the precipitation features, which a scene already
+// watches with a threshold.
 //
-// Scene TRIGGERS are the other direction ("this happened"): they are fired by
-// the device that observes the event, see src/devices/motionSensor.js.
-//
-// The rules that matter:
-//   - `fields` arrive RESOLVED: scene variables substituted, defaults applied,
-//     validated by the core; a `"source": "devices"` field is the chosen
-//     device external_id;
-//   - resolve an object of the declared `outputs` (scalars only), readable by
-//     the following actions of the scene, or `undefined` for none. Keys not
-//     declared in the manifest are dropped by the core;
-//   - throwing fails THIS action only: the scene logs it and continues. A
-//     scene action is never a condition: return an output and let the scene
-//     author gate on it;
-//   - never fire a scene event as a consequence of a received action: a scene
-//     bound to that event would loop through the integration.
+// Served from the last daily forecast (read every 3 hours); one read only
+// when the place has none yet. The outputs speak the configuration's
+// language: a scene action does not receive the user's.
 // -----------------------------------------------------------------------------
 
-import { createLogger } from '@gladysassistant/integration-sdk';
-import { signalDevice } from './devices/index.js';
+import { ENDPOINTS } from './metoffice/client.js';
+import { addDays, localDate } from './metoffice/forecast.js';
+import { weatherText } from './i18n.js';
+import { locationName } from './location.js';
 
-const logger = createLogger({ name: 'scenes' });
+export const SCENE_ACTION = { GET_FORECAST: 'get_forecast' };
+export const DAYS = { today: 0, tomorrow: 1, day_after_tomorrow: 2 };
+
+/**
+ * @param {import('./hub.js').ForecastHub} hub
+ * @param {{ device?: string, day?: string }} fields resolved by the core
+ * @returns {Promise<object>} the declared outputs
+ */
+export async function getForecast(hub, fields = {}) {
+  if (!hub.isReady()) {
+    throw new Error('Met Office: not configured, or no place to forecast');
+  }
+  const location = fields.device
+    ? hub.locationByDevice(fields.device)
+    : (hub.createdLocations()[0] ?? hub.locations[0]);
+  if (!location) {
+    throw new Error('Met Office: this place is no longer in the configuration');
+  }
+  const offset = DAYS[fields.day] ?? DAYS.tomorrow;
+  if (!hub.dailyOf(location)) {
+    await hub.read(location, ENDPOINTS.DAILY);
+  }
+  const daily = hub.dailyOf(location);
+  const date = addDays(localDate(hub.now(), hub.timeZone), offset);
+  const day = daily?.days.find((d) => d.date === date);
+  if (!day) {
+    throw new Error(`Met Office: no daily forecast for ${date} yet`);
+  }
+  const language = hub.config.language;
+  const code = day.dayCode ?? day.nightCode;
+  const outputs = {
+    place: locationName(location, hub.hourlyOf(location)),
+    date,
+    weather: weatherText(code, language),
+    weather_code: code,
+    max_temperature: day.maxTemperature,
+    min_temperature: day.minTemperature,
+    rain_probability_day: day.dayPrecipitationProbability,
+    rain_probability_night: day.nightPrecipitationProbability,
+    wind_gust: day.windGust,
+    uv_index: day.uvIndex,
+  };
+  // An unknown value is left out rather than sent as null: the core drops
+  // what it cannot coerce, and a scene then sees the variable empty.
+  return Object.fromEntries(Object.entries(outputs).filter(([, v]) => v !== null));
+}
 
 export const SCENE_ACTIONS = {
-  // The ack is awaited under the action's `timeout_seconds` (15 s in the
-  // manifest), counted from the moment the scene reaches the action.
-  async identify_device(gladys, { fields, config }) {
-    logger.info(`Scene action identify_device <- ${fields.device}`);
-    const signalled = await signalDevice(gladys, fields.device, config);
-    return { signalled };
-  },
+  [SCENE_ACTION.GET_FORECAST]: getForecast,
 };

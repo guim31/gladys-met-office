@@ -1,8 +1,8 @@
 {
-  "name": "gladys-integration-template-js",
+  "name": "gladys-met-office",
   "version": "1.0.0",
   "private": true,
-  "description": "Official starter template to build an external integration for Gladys Assistant with the JavaScript SDK.",
+  "description": "Met Office Weather DataHub forecasts in Gladys Assistant: one device per place, a forecast widget and a scene action.",
   "type": "module",
   "main": "index.js",
   "scripts": {

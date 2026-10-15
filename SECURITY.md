@@ -30,6 +30,20 @@ Gladys before reporting a problem.
 
 In scope: the code of this repository and the Docker image it publishes.
 
+What the integration handles:
+
+- **Secrets**: the Met Office Weather DataHub API key is a `secret` field of the Gladys configuration.
+  The integration reads it from Gladys, keeps it in memory, and sends it only to
+  `data.hub.api.metoffice.gov.uk`, over HTTPS, in the `apikey` header the API requires (never in a
+  URL). It never writes it to `/data`, to the logs, nor to an error message.
+- **Location**: the manifest declares `location: true`, so the integration can read the coordinates
+  of the houses of Gladys (shown on the install screen). They are sent only to the Met Office, as the
+  position of the forecast, and never logged.
+- **Storage**: nothing. The integration writes nothing under `/data`; the last forecasts live in
+  memory only.
+- **Network**: outgoing HTTPS requests to `data.hub.api.metoffice.gov.uk` only (GET, read-only), and
+  the WebSocket and host API of Gladys. No port is opened, no local network access.
+
 Out of scope: Gladys Assistant itself (see its
-[security policy](https://github.com/GladysAssistant/Gladys/security/policy)),
-and the third-party services and devices the integration talks to.
+[security policy](https://github.com/GladysAssistant/Gladys/security/policy)), and the Met Office
+Weather DataHub service.
