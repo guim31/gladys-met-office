@@ -1,93 +1,71 @@
+// -----------------------------------------------------------------------------
+// The scene action "get_forecast": the daily forecast of a day, from the
+// cache, in the language of the configuration.
+// -----------------------------------------------------------------------------
+
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
-import { createFakeGladys } from '@gladysassistant/integration-sdk/testing';
-import { DEVICE_BLUEPRINTS } from '../src/devices/index.js';
-import { MOTION_DETECTED_TRIGGER, motionSensor } from '../src/devices/motionSensor.js';
-import { SCENE_ACTIONS } from '../src/scenes.js';
-import { normalizeConfig } from '../src/config.js';
+import { createAll, createWorld, ids } from './helpers/world.js';
 
-const manifest = JSON.parse(
-  await readFile(new URL('../gladys-assistant-integration.json', import.meta.url), 'utf8'),
-);
-const config = normalizeConfig();
-
-const declarationOf = (list, key) => manifest[list].find((entry) => entry.key === key);
-const keysOf = (list) => (list ?? []).map((entry) => entry.key);
-const deviceIdOf = (gladys, key) =>
-  DEVICE_BLUEPRINTS.find((bp) => bp.key === key).deviceExternalId(gladys);
-
-// Let the async interval callback run to completion.
-const flush = () => new Promise((resolve) => setImmediate(resolve));
-
-test('the motion sensor fires one motion_detected event per detection, none on the clear', async (t) => {
-  t.mock.timers.enable({ apis: ['setInterval', 'setTimeout'] });
-  const gladys = createFakeGladys();
-  const stopPush = motionSensor.startPush(gladys, config);
-  try {
-    t.mock.timers.tick(60_000);
-    await flush();
-    assert.equal(gladys.fake.sceneEvents.length, 1, 'one detection, one event');
-    assert.equal(gladys.fake.sceneEvents[0].key, MOTION_DETECTED_TRIGGER);
-    assert.equal(gladys.fake.states.at(-1).state, 1, 'the state is still published');
-
-    t.mock.timers.tick(10_000);
-    await flush();
-    assert.equal(gladys.fake.states.at(-1).state, 0, 'the detection is cleared');
-    assert.equal(gladys.fake.sceneEvents.length, 1, 'the clear fires no event');
-  } finally {
-    stopPush();
-  }
-});
-
-test('motion_detected data only carries keys the trigger declares', async (t) => {
-  t.mock.timers.enable({ apis: ['setInterval', 'setTimeout'] });
-  const gladys = createFakeGladys();
-  const stopPush = motionSensor.startPush(gladys, config);
-  try {
-    t.mock.timers.tick(60_000);
-    await flush();
-  } finally {
-    stopPush();
-  }
-  const [{ data }] = gladys.fake.sceneEvents;
-  const trigger = declarationOf('scene_triggers', MOTION_DETECTED_TRIGGER);
-  // The core keeps the `fields` keys (filters) and the `variables` keys
-  // (exposed to the scene): any other key would be silently dropped.
-  const declared = [...keysOf(trigger.fields), ...keysOf(trigger.variables)];
-  for (const [key, value] of Object.entries(data)) {
-    assert.ok(declared.includes(key), `data.${key} is not declared, the core would drop it`);
-    assert.ok(value === null || typeof value !== 'object', `data.${key} must be a primitive`);
-  }
-  // A `"source": "devices"` filter stores a device external_id.
-  assert.equal(data.device, deviceIdOf(gladys, 'motion-sensor'));
-  const targets = trigger.fields.find((field) => field.key === 'target').options;
-  assert.ok(
-    targets.some((option) => option.value === data.target),
-    `data.target "${data.target}" must be one of the filter options`,
-  );
-});
-
-test('identify_device signals the chosen device and returns the declared outputs', async () => {
-  const gladys = createFakeGladys();
-  const outputs = await SCENE_ACTIONS.identify_device(gladys, {
-    fields: { device: deviceIdOf(gladys, 'light') },
-    config,
+test('tomorrow, by default, for the first place', async () => {
+  const world = await createWorld();
+  const calls = world.api.calls.length;
+  const ack = await world.gladys.fake.sceneAction('get_forecast', {});
+  assert.equal(ack.success, true);
+  assert.deepEqual(ack.data.outputs, {
+    place: 'Maison',
+    date: '2024-11-24',
+    weather: 'Nuageux',
+    weather_code: 7,
+    max_temperature: 12.7,
+    min_temperature: 8.2,
+    rain_probability_day: 26,
+    rain_probability_night: 23,
+    wind_gust: 42.7,
+    uv_index: 1,
   });
-  assert.deepEqual(outputs, { signalled: true });
-  const declared = keysOf(declarationOf('scene_actions', 'identify_device').outputs);
-  for (const key of Object.keys(outputs)) {
-    assert.ok(declared.includes(key), `output "${key}" is not declared, the core would drop it`);
-  }
+  assert.equal(world.api.calls.length, calls, 'served from the cache');
+  await world.app.stop();
 });
 
-test('identify_device reports a device that cannot signal itself through its output', async () => {
-  // Not a failure: a scene action is never a condition, the scene author
-  // gates the following actions on the output instead.
-  const gladys = createFakeGladys();
-  const outputs = await SCENE_ACTIONS.identify_device(gladys, {
-    fields: { device: deviceIdOf(gladys, 'weather-station') },
-    config,
+test('today and the day after, for a chosen place, in English', async () => {
+  const world = await createWorld({
+    config: {
+      location_source: 'coordinates',
+      coordinates: 'Home: 53.38374, -2.90929; Lynn: 52.75556, 0.44231',
+      language: 'en',
+    },
   });
-  assert.deepEqual(outputs, { signalled: false });
+  await createAll(world);
+  const lynn = world.gladys.externalIds('location', '52.756_0.442').device;
+  const today = await world.gladys.fake.sceneAction('get_forecast', { device: lynn, day: 'today' });
+  assert.equal(today.data.outputs.place, 'Lynn');
+  assert.equal(today.data.outputs.date, '2024-11-23');
+  assert.equal(today.data.outputs.weather, 'Heavy rain');
+  const after = await world.gladys.fake.sceneAction('get_forecast', {
+    device: lynn,
+    day: 'day_after_tomorrow',
+  });
+  assert.equal(after.data.outputs.date, '2024-11-25');
+  await world.app.stop();
+});
+
+test('a place removed from the configuration fails the action, not the scene', async () => {
+  const world = await createWorld();
+  const ack = await world.gladys.fake.sceneAction('get_forecast', {
+    device: ids(world.gladys, 'house-gone').device,
+  });
+  assert.equal(ack.success, false);
+  assert.match(ack.error, /no longer in the configuration/);
+  await world.app.stop();
+});
+
+test('no daily forecast yet: one read, then the answer', async () => {
+  const world = await createWorld();
+  world.hub.cache.get('house-maison').daily = null;
+  const calls = world.api.callsOf('daily');
+  const ack = await world.gladys.fake.sceneAction('get_forecast', { day: 'today' });
+  assert.equal(ack.success, true);
+  assert.equal(world.api.callsOf('daily'), calls + 1);
+  await world.app.stop();
 });

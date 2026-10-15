@@ -1,0 +1,818 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.9256, 53.3986, 47]
+      },
+      "properties": {
+        "location": {
+          "name": "Wavertree"
+        },
+        "requestPointDistance": 1975.3601,
+        "modelRunDate": "2024-11-23T12:00Z",
+        "timeSeries": [
+          {
+            "time": "2024-11-22T00:00Z",
+            "midday10MWindSpeed": 6.38,
+            "midnight10MWindSpeed": 2.78,
+            "midday10MWindDirection": 261,
+            "midnight10MWindDirection": 155,
+            "midday10MWindGust": 9.77,
+            "midnight10MWindGust": 8.75,
+            "middayVisibility": 29980,
+            "midnightVisibility": 18024,
+            "middayRelativeHumidity": 73.47,
+            "midnightRelativeHumidity": 86.1,
+            "middayMslp": 100790,
+            "midnightMslp": 101020,
+            "nightSignificantWeatherCode": 12,
+            "dayMaxScreenTemperature": 7.17,
+            "nightMinScreenTemperature": 2,
+            "dayUpperBoundMaxTemp": 7.78,
+            "nightUpperBoundMinTemp": 3.84,
+            "dayLowerBoundMaxTemp": 4.64,
+            "nightLowerBoundMinTemp": 1.18,
+            "nightMinFeelsLikeTemp": -3.07,
+            "dayUpperBoundMaxFeelsLikeTemp": 4.39,
+            "nightUpperBoundMinFeelsLikeTemp": -1.33,
+            "dayLowerBoundMaxFeelsLikeTemp": 2.49,
+            "nightLowerBoundMinFeelsLikeTemp": -4.04,
+            "nightProbabilityOfPrecipitation": 95,
+            "nightProbabilityOfSnow": 5,
+            "nightProbabilityOfHeavySnow": 0,
+            "nightProbabilityOfRain": 93,
+            "nightProbabilityOfHeavyRain": 90,
+            "nightProbabilityOfHail": 20,
+            "nightProbabilityOfSferics": 9
+          },
+          {
+            "time": "2024-11-23T00:00Z",
+            "midday10MWindSpeed": 7.87,
+            "midnight10MWindSpeed": 7.44,
+            "midday10MWindDirection": 176,
+            "midnight10MWindDirection": 171,
+            "midday10MWindGust": 15.43,
+            "midnight10MWindGust": 14.08,
+            "middayVisibility": 5106,
+            "midnightVisibility": 39734,
+            "middayRelativeHumidity": 95.13,
+            "midnightRelativeHumidity": 86.99,
+            "middayMslp": 98750,
+            "midnightMslp": 98490,
+            "maxUvIndex": 1,
+            "daySignificantWeatherCode": 12,
+            "nightSignificantWeatherCode": 12,
+            "dayMaxScreenTemperature": 12.56,
+            "nightMinScreenTemperature": 11.46,
+            "dayUpperBoundMaxTemp": 14.48,
+            "nightUpperBoundMinTemp": 13.92,
+            "dayLowerBoundMaxTemp": 11.63,
+            "nightLowerBoundMinTemp": 10.7,
+            "dayMaxFeelsLikeTemp": 9.81,
+            "nightMinFeelsLikeTemp": 9.53,
+            "dayUpperBoundMaxFeelsLikeTemp": 12.68,
+            "nightUpperBoundMinFeelsLikeTemp": 11.39,
+            "dayLowerBoundMaxFeelsLikeTemp": 9.81,
+            "nightLowerBoundMinFeelsLikeTemp": 9.53,
+            "dayProbabilityOfPrecipitation": 65,
+            "nightProbabilityOfPrecipitation": 74,
+            "dayProbabilityOfSnow": 3,
+            "nightProbabilityOfSnow": 0,
+            "dayProbabilityOfHeavySnow": 0,
+            "nightProbabilityOfHeavySnow": 0,
+            "dayProbabilityOfRain": 65,
+            "nightProbabilityOfRain": 74,
+            "dayProbabilityOfHeavyRain": 41,
+            "nightProbabilityOfHeavyRain": 73,
+            "dayProbabilityOfHail": 3,
+            "nightProbabilityOfHail": 15,
+            "dayProbabilityOfSferics": 2,
+            "nightProbabilityOfSferics": 12
+          },
+          {
+            "time": "2024-11-24T00:00Z",
+            "midday10MWindSpeed": 6.65,
+            "midnight10MWindSpeed": 7.33,
+            "midday10MWindDirection": 203,
+            "midnight10MWindDirection": 211,
+            "midday10MWindGust": 11.85,
+            "midnight10MWindGust": 13.11,
+            "middayVisibility": 36358,
+            "midnightVisibility": 51563,
+            "middayRelativeHumidity": 70.26,
+            "midnightRelativeHumidity": 72.97,
+            "middayMslp": 98748,
+            "midnightMslp": 98712,
+            "maxUvIndex": 1,
+            "daySignificantWeatherCode": 7,
+            "nightSignificantWeatherCode": 7,
+            "dayMaxScreenTemperature": 12.7,
+            "nightMinScreenTemperature": 8.21,
+            "dayUpperBoundMaxTemp": 15.19,
+            "nightUpperBoundMinTemp": 10.67,
+            "dayLowerBoundMaxTemp": 11.87,
+            "nightLowerBoundMinTemp": 7.03,
+            "dayMaxFeelsLikeTemp": 9.17,
+            "nightMinFeelsLikeTemp": 4.84,
+            "dayUpperBoundMaxFeelsLikeTemp": 12.63,
+            "nightUpperBoundMinFeelsLikeTemp": 7.25,
+            "dayLowerBoundMaxFeelsLikeTemp": 9.17,
+            "nightLowerBoundMinFeelsLikeTemp": 3.81,
+            "dayProbabilityOfPrecipitation": 26,
+            "nightProbabilityOfPrecipitation": 23,
+            "dayProbabilityOfSnow": 0,
+            "nightProbabilityOfSnow": 0,
+            "dayProbabilityOfHeavySnow": 0,
+            "nightProbabilityOfHeavySnow": 0,
+            "dayProbabilityOfRain": 26,
+            "nightProbabilityOfRain": 23,
+            "dayProbabilityOfHeavyRain": 13,
+            "nightProbabilityOfHeavyRain": 16,
+            "dayProbabilityOfHail": 0,
+            "nightProbabilityOfHail": 3,
+            "dayProbabilityOfSferics": 3,
+            "nightProbabilityOfSferics": 2
+          },
+          {
+            "time": "2024-11-25T00:00Z",
+            "midday10MWindSpeed": 8.52,
+            "midnight10MWindSpeed": 8.12,
+            "midday10MWindDirection": 251,
+            "midnight10MWindDirection": 262,
+            "midday10MWindGust": 14.49,
+            "midnight10MWindGust": 13.33,
+            "middayVisibility": 32255,
+            "midnightVisibility": 36209,
+            "middayRelativeHumidity": 68.89,
+            "midnightRelativeHumidity": 72.82,
+            "middayMslp": 99488,
+            "midnightMslp": 100481,
+            "maxUvIndex": 1,
+            "daySignificantWeatherCode": 3,
+            "nightSignificantWeatherCode": 2,
+            "dayMaxScreenTemperature": 9.81,
+            "nightMinScreenTemperature": 7.71,
+            "dayUpperBoundMaxTemp": 10.98,
+            "nightUpperBoundMinTemp": 9.31,
+            "dayLowerBoundMaxTemp": 8.42,
+            "nightLowerBoundMinTemp": 4.42,
+            "dayMaxFeelsLikeTemp": 5.33,
+            "nightMinFeelsLikeTemp": 4.19,
+            "dayUpperBoundMaxFeelsLikeTemp": 7.12,
+            "nightUpperBoundMinFeelsLikeTemp": 5.29,
+            "dayLowerBoundMaxFeelsLikeTemp": 4.86,
+            "nightLowerBoundMinFeelsLikeTemp": 3.1,
+            "dayProbabilityOfPrecipitation": 5,
+            "nightProbabilityOfPrecipitation": 6,
+            "dayProbabilityOfSnow": 0,
+            "nightProbabilityOfSnow": 0,
+            "dayProbabilityOfHeavySnow": 0,
+            "nightProbabilityOfHeavySnow": 0,
+            "dayProbabilityOfRain": 5,
+            "nightProbabilityOfRain": 6,
+            "dayProbabilityOfHeavyRain": 3,
+            "nightProbabilityOfHeavyRain": 5,
+            "dayProbabilityOfHail": 0,
+            "nightProbabilityOfHail": 1,
+            "dayProbabilityOfSferics": 1,
+            "nightProbabilityOfSferics": 1
+          },
+          {
+            "time": "2024-11-26T00:00Z",
+            "midday10MWindSpeed": 5.68,
+            "midnight10MWindSpeed": 3.17,
+            "midday10MWindDirection": 265,
+            "midnight10MWindDirection": 74,
+            "midday10MWindGust": 9.58,
+            "midnight10MWindGust": 5.42,
+            "middayVisibility": 34027,
+            "midnightVisibility": 12383,
+            "middayRelativeHumidity": 70.41,
+            "midnightRelativeHumidity": 89.82,
+            "middayMslp": 101293,
+            "midnightMslp": 101390,
+            "maxUvIndex": 1,
+            "daySignificantWeatherCode": 3,
+            "nightSignificantWeatherCode": 7,
+            "dayMaxScreenTemperature": 8.72,
+            "nightMinScreenTemperature": 3.76,
+            "dayUpperBoundMaxTemp": 10.14,
+            "nightUpperBoundMinTemp": 7.47,
+            "dayLowerBoundMaxTemp": 6.46,
+            "nightLowerBoundMinTemp": -0.43,
+            "dayMaxFeelsLikeTemp": 5.9,
+            "nightMinFeelsLikeTemp": 1.31,
+            "dayUpperBoundMaxFeelsLikeTemp": 7.37,
+            "nightUpperBoundMinFeelsLikeTemp": 4.37,
+            "dayLowerBoundMaxFeelsLikeTemp": 3.99,
+            "nightLowerBoundMinFeelsLikeTemp": -3.09,
+            "dayProbabilityOfPrecipitation": 6,
+            "nightProbabilityOfPrecipitation": 44,
+            "dayProbabilityOfSnow": 0,
+            "nightProbabilityOfSnow": 1,
+            "dayProbabilityOfHeavySnow": 0,
+            "nightProbabilityOfHeavySnow": 1,
+            "dayProbabilityOfRain": 6,
+            "nightProbabilityOfRain": 44,
+            "dayProbabilityOfHeavyRain": 5,
+            "nightProbabilityOfHeavyRain": 24,
+            "dayProbabilityOfHail": 1,
+            "nightProbabilityOfHail": 2,
+            "dayProbabilityOfSferics": 1,
+            "nightProbabilityOfSferics": 1
+          },
+          {
+            "time": "2024-11-27T00:00Z",
+            "midday10MWindSpeed": 5.15,
+            "midnight10MWindSpeed": 3.29,
+            "midday10MWindDirection": 8,
+            "midnight10MWindDirection": 31,
+            "midday10MWindGust": 8.94,
+            "midnight10MWindGust": 5.54,
+            "middayVisibility": 25011,
+            "midnightVisibility": 31513,
+            "middayRelativeHumidity": 81.23,
+            "midnightRelativeHumidity": 86.67,
+            "middayMslp": 101439,
+            "midnightMslp": 102175,
+            "maxUvIndex": 1,
+            "daySignificantWeatherCode": 10,
+            "nightSignificantWeatherCode": 0,
+            "dayMaxScreenTemperature": 6.66,
+            "nightMinScreenTemperature": 2.36,
+            "dayUpperBoundMaxTemp": 11.14,
+            "nightUpperBoundMinTemp": 7.25,
+            "dayLowerBoundMaxTemp": 3.03,
+            "nightLowerBoundMinTemp": -3.02,
+            "dayMaxFeelsLikeTemp": 3.31,
+            "nightMinFeelsLikeTemp": 0.18,
+            "dayUpperBoundMaxFeelsLikeTemp": 9.03,
+            "nightUpperBoundMinFeelsLikeTemp": 3.85,
+            "dayLowerBoundMaxFeelsLikeTemp": 1.04,
+            "nightLowerBoundMinFeelsLikeTemp": -7.6,
+            "dayProbabilityOfPrecipitation": 43,
+            "nightProbabilityOfPrecipitation": 9,
+            "dayProbabilityOfSnow": 0,
+            "nightProbabilityOfSnow": 3,
+            "dayProbabilityOfHeavySnow": 0,
+            "nightProbabilityOfHeavySnow": 0,
+            "dayProbabilityOfRain": 43,
+            "nightProbabilityOfRain": 8,
+            "dayProbabilityOfHeavyRain": 24,
+            "nightProbabilityOfHeavyRain": 7,
+            "dayProbabilityOfHail": 1,
+            "nightProbabilityOfHail": 1,
+            "dayProbabilityOfSferics": 3,
+            "nightProbabilityOfSferics": 1
+          },
+          {
+            "time": "2024-11-28T00:00Z",
+            "midday10MWindSpeed": 3.51,
+            "midnight10MWindSpeed": 5.57,
+            "midday10MWindDirection": 104,
+            "midnight10MWindDirection": 131,
+            "midday10MWindGust": 6.21,
+            "midnight10MWindGust": 9.21,
+            "middayVisibility": 28173,
+            "midnightVisibility": 33839,
+            "middayRelativeHumidity": 85.35,
+            "midnightRelativeHumidity": 86.07,
+            "middayMslp": 102512,
+            "midnightMslp": 102382,
+            "maxUvIndex": 1,
+            "daySignificantWeatherCode": 7,
+            "nightSignificantWeatherCode": 7,
+            "dayMaxScreenTemperature": 5.73,
+            "nightMinScreenTemperature": 3.79,
+            "dayUpperBoundMaxTemp": 9.42,
+            "nightUpperBoundMinTemp": 8.18,
+            "dayLowerBoundMaxTemp": 1.26,
+            "nightLowerBoundMinTemp": -1.91,
+            "dayMaxFeelsLikeTemp": 2.95,
+            "nightMinFeelsLikeTemp": 1.63,
+            "dayUpperBoundMaxFeelsLikeTemp": 7.21,
+            "nightUpperBoundMinFeelsLikeTemp": 4.13,
+            "dayLowerBoundMaxFeelsLikeTemp": -0.81,
+            "nightLowerBoundMinFeelsLikeTemp": -5.94,
+            "dayProbabilityOfPrecipitation": 9,
+            "nightProbabilityOfPrecipitation": 9,
+            "dayProbabilityOfSnow": 2,
+            "nightProbabilityOfSnow": 1,
+            "dayProbabilityOfHeavySnow": 0,
+            "nightProbabilityOfHeavySnow": 0,
+            "dayProbabilityOfRain": 9,
+            "nightProbabilityOfRain": 9,
+            "dayProbabilityOfHeavyRain": 3,
+            "nightProbabilityOfHeavyRain": 3,
+            "dayProbabilityOfHail": 0,
+            "nightProbabilityOfHail": 0,
+            "dayProbabilityOfSferics": 0,
+            "nightProbabilityOfSferics": 0
+          },
+          {
+            "time": "2024-11-29T00:00Z",
+            "midday10MWindSpeed": 6.39,
+            "midnight10MWindSpeed": 5.59,
+            "midday10MWindDirection": 137,
+            "midnight10MWindDirection": 151,
+            "midday10MWindGust": 10.72,
+            "midnight10MWindGust": 9.21,
+            "middayVisibility": 34870,
+            "midnightVisibility": 31318,
+            "middayRelativeHumidity": 83.78,
+            "midnightRelativeHumidity": 87.71,
+            "middayMslp": 101985,
+            "midnightMslp": 101688,
+            "maxUvIndex": 1,
+            "daySignificantWeatherCode": 7,
+            "nightSignificantWeatherCode": 7,
+            "dayMaxScreenTemperature": 8.21,
+            "nightMinScreenTemperature": 7.04,
+            "dayUpperBoundMaxTemp": 12.62,
+            "nightUpperBoundMinTemp": 10.76,
+            "dayLowerBoundMaxTemp": 4.15,
+            "nightLowerBoundMinTemp": -1.9,
+            "dayMaxFeelsLikeTemp": 4.88,
+            "nightMinFeelsLikeTemp": 4.95,
+            "dayUpperBoundMaxFeelsLikeTemp": 10.74,
+            "nightUpperBoundMinFeelsLikeTemp": 9.04,
+            "dayLowerBoundMaxFeelsLikeTemp": 0.63,
+            "nightLowerBoundMinFeelsLikeTemp": -6.49,
+            "dayProbabilityOfPrecipitation": 11,
+            "nightProbabilityOfPrecipitation": 13,
+            "dayProbabilityOfSnow": 0,
+            "nightProbabilityOfSnow": 0,
+            "dayProbabilityOfHeavySnow": 0,
+            "nightProbabilityOfHeavySnow": 0,
+            "dayProbabilityOfRain": 11,
+            "nightProbabilityOfRain": 13,
+            "dayProbabilityOfHeavyRain": 4,
+            "nightProbabilityOfHeavyRain": 6,
+            "dayProbabilityOfHail": 1,
+            "nightProbabilityOfHail": 0,
+            "dayProbabilityOfSferics": 0,
+            "nightProbabilityOfSferics": 1
+          }
+        ]
+      }
+    }
+  ],
+  "parameters": [
+    {
+      "daySignificantWeatherCode": {
+        "type": "Parameter",
+        "description": "Day Significant Weather Code",
+        "unit": {
+          "label": "dimensionless",
+          "symbol": {
+            "value": "https://datahub.metoffice.gov.uk/",
+            "type": "1"
+          }
+        }
+      },
+      "midnightRelativeHumidity": {
+        "type": "Parameter",
+        "description": "Relative Humidity at Local Midnight",
+        "unit": {
+          "label": "percentage",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "%"
+          }
+        }
+      },
+      "nightProbabilityOfHeavyRain": {
+        "type": "Parameter",
+        "description": "Probability of Heavy Rain During The Night",
+        "unit": {
+          "label": "percentage",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "%"
+          }
+        }
+      },
+      "midnight10MWindSpeed": {
+        "type": "Parameter",
+        "description": "10m Wind Speed at Local Midnight",
+        "unit": {
+          "label": "metres per second",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "m/s"
+          }
+        }
+      },
+      "nightUpperBoundMinFeelsLikeTemp": {
+        "type": "Parameter",
+        "description": "Upper Bound on Night Minimum Feels Like Air Temperature",
+        "unit": {
+          "label": "degrees Celsius",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "Cel"
+          }
+        }
+      },
+      "nightUpperBoundMinTemp": {
+        "type": "Parameter",
+        "description": "Upper Bound on Night Minimum Screen Air Temperature",
+        "unit": {
+          "label": "degrees Celsius",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "Cel"
+          }
+        }
+      },
+      "midnightVisibility": {
+        "type": "Parameter",
+        "description": "Visibility at Local Midnight",
+        "unit": {
+          "label": "metres",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "m"
+          }
+        }
+      },
+      "dayUpperBoundMaxFeelsLikeTemp": {
+        "type": "Parameter",
+        "description": "Upper Bound on Day Maximum Feels Like Air Temperature",
+        "unit": {
+          "label": "degrees Celsius",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "Cel"
+          }
+        }
+      },
+      "nightProbabilityOfRain": {
+        "type": "Parameter",
+        "description": "Probability of Rain During The Night",
+        "unit": {
+          "label": "percentage",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "%"
+          }
+        }
+      },
+      "midday10MWindDirection": {
+        "type": "Parameter",
+        "description": "10m Wind Direction at Local Midday",
+        "unit": {
+          "label": "degrees",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "deg"
+          }
+        }
+      },
+      "nightLowerBoundMinFeelsLikeTemp": {
+        "type": "Parameter",
+        "description": "Lower Bound on Night Minimum Feels Like Air Temperature",
+        "unit": {
+          "label": "degrees Celsius",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "Cel"
+          }
+        }
+      },
+      "nightProbabilityOfHail": {
+        "type": "Parameter",
+        "description": "Probability of Hail During The Night",
+        "unit": {
+          "label": "percentage",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "%"
+          }
+        }
+      },
+      "middayMslp": {
+        "type": "Parameter",
+        "description": "Mean Sea Level Pressure at Local Midday",
+        "unit": {
+          "label": "pascals",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "Pa"
+          }
+        }
+      },
+      "dayProbabilityOfHeavySnow": {
+        "type": "Parameter",
+        "description": "Probability of Heavy Snow During The Day",
+        "unit": {
+          "label": "percentage",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "%"
+          }
+        }
+      },
+      "nightProbabilityOfPrecipitation": {
+        "type": "Parameter",
+        "description": "Probability of Precipitation During The Night",
+        "unit": {
+          "label": "percentage",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "%"
+          }
+        }
+      },
+      "dayProbabilityOfHail": {
+        "type": "Parameter",
+        "description": "Probability of Hail During The Day",
+        "unit": {
+          "label": "percentage",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "%"
+          }
+        }
+      },
+      "dayProbabilityOfRain": {
+        "type": "Parameter",
+        "description": "Probability of Rain During The Day",
+        "unit": {
+          "label": "percentage",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "%"
+          }
+        }
+      },
+      "midday10MWindSpeed": {
+        "type": "Parameter",
+        "description": "10m Wind Speed at Local Midday",
+        "unit": {
+          "label": "metres per second",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "m/s"
+          }
+        }
+      },
+      "midday10MWindGust": {
+        "type": "Parameter",
+        "description": "10m Wind Gust Speed at Local Midday",
+        "unit": {
+          "label": "metres per second",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "m/s"
+          }
+        }
+      },
+      "middayVisibility": {
+        "type": "Parameter",
+        "description": "Visibility at Local Midday",
+        "unit": {
+          "label": "metres",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "m"
+          }
+        }
+      },
+      "midnight10MWindGust": {
+        "type": "Parameter",
+        "description": "10m Wind Gust Speed at Local Midnight",
+        "unit": {
+          "label": "metres per second",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "m/s"
+          }
+        }
+      },
+      "midnightMslp": {
+        "type": "Parameter",
+        "description": "Mean Sea Level Pressure at Local Midnight",
+        "unit": {
+          "label": "pascals",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "Pa"
+          }
+        }
+      },
+      "dayProbabilityOfSferics": {
+        "type": "Parameter",
+        "description": "Probability of Sferics During The Day",
+        "unit": {
+          "label": "percentage",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "%"
+          }
+        }
+      },
+      "nightSignificantWeatherCode": {
+        "type": "Parameter",
+        "description": "Night Significant Weather Code",
+        "unit": {
+          "label": "dimensionless",
+          "symbol": {
+            "value": "https://datahub.metoffice.gov.uk/",
+            "type": "1"
+          }
+        }
+      },
+      "dayProbabilityOfPrecipitation": {
+        "type": "Parameter",
+        "description": "Probability of Precipitation During The Day",
+        "unit": {
+          "label": "percentage",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "%"
+          }
+        }
+      },
+      "dayProbabilityOfHeavyRain": {
+        "type": "Parameter",
+        "description": "Probability of Heavy Rain During The Day",
+        "unit": {
+          "label": "percentage",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "%"
+          }
+        }
+      },
+      "dayMaxScreenTemperature": {
+        "type": "Parameter",
+        "description": "Day Maximum Screen Air Temperature",
+        "unit": {
+          "label": "degrees Celsius",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "Cel"
+          }
+        }
+      },
+      "nightMinScreenTemperature": {
+        "type": "Parameter",
+        "description": "Night Minimum Screen Air Temperature",
+        "unit": {
+          "label": "degrees Celsius",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "Cel"
+          }
+        }
+      },
+      "midnight10MWindDirection": {
+        "type": "Parameter",
+        "description": "10m Wind Direction at Local Midnight",
+        "unit": {
+          "label": "degrees",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "deg"
+          }
+        }
+      },
+      "maxUvIndex": {
+        "type": "Parameter",
+        "description": "Day Maximum UV Index",
+        "unit": {
+          "label": "dimensionless",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "1"
+          }
+        }
+      },
+      "dayProbabilityOfSnow": {
+        "type": "Parameter",
+        "description": "Probability of Snow During The Day",
+        "unit": {
+          "label": "percentage",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "%"
+          }
+        }
+      },
+      "nightProbabilityOfSnow": {
+        "type": "Parameter",
+        "description": "Probability of Snow During The Night",
+        "unit": {
+          "label": "percentage",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "%"
+          }
+        }
+      },
+      "dayLowerBoundMaxTemp": {
+        "type": "Parameter",
+        "description": "Lower Bound on Day Maximum Screen Air Temperature",
+        "unit": {
+          "label": "degrees Celsius",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "Cel"
+          }
+        }
+      },
+      "nightProbabilityOfHeavySnow": {
+        "type": "Parameter",
+        "description": "Probability of Heavy Snow During The Night",
+        "unit": {
+          "label": "percentage",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "%"
+          }
+        }
+      },
+      "dayLowerBoundMaxFeelsLikeTemp": {
+        "type": "Parameter",
+        "description": "Lower Bound on Day Maximum Feels Like Air Temperature",
+        "unit": {
+          "label": "degrees Celsius",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "Cel"
+          }
+        }
+      },
+      "dayUpperBoundMaxTemp": {
+        "type": "Parameter",
+        "description": "Upper Bound on Day Maximum Screen Air Temperature",
+        "unit": {
+          "label": "degrees Celsius",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "Cel"
+          }
+        }
+      },
+      "dayMaxFeelsLikeTemp": {
+        "type": "Parameter",
+        "description": "Day Maximum Feels Like Air Temperature",
+        "unit": {
+          "label": "degrees Celsius",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "Cel"
+          }
+        }
+      },
+      "middayRelativeHumidity": {
+        "type": "Parameter",
+        "description": "Relative Humidity at Local Midday",
+        "unit": {
+          "label": "percentage",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "%"
+          }
+        }
+      },
+      "nightLowerBoundMinTemp": {
+        "type": "Parameter",
+        "description": "Lower Bound on Night Minimum Screen Air Temperature",
+        "unit": {
+          "label": "degrees Celsius",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "Cel"
+          }
+        }
+      },
+      "nightMinFeelsLikeTemp": {
+        "type": "Parameter",
+        "description": "Night Minimum Feels Like Air Temperature",
+        "unit": {
+          "label": "degrees Celsius",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "Cel"
+          }
+        }
+      },
+      "nightProbabilityOfSferics": {
+        "type": "Parameter",
+        "description": "Probability of Sferics During The Night",
+        "unit": {
+          "label": "percentage",
+          "symbol": {
+            "value": "http://www.opengis.net/def/uom/UCUM/",
+            "type": "%"
+          }
+        }
+      }
+    }
+  ]
+}
